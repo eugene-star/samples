@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Orders>
+  <Order id="1">
+    <Customer id="1"/>
+    <OrderDetails>
+      <Product id="1" amount="1"/>
+    </OrderDetails>
+  </Order>
+</Orders>
