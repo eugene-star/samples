@@ -50,8 +50,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
-/Square/SquareLibTest/obj
 /Square/.vs/Square
+/Square/SquareLibTest/obj
+/Square/SquareLibTest/bin
 /Square/SquareLib/obj
-/Square/SquareLib/bin/Debug/netcoreapp2.1
-/Square/SquareLibTest/bin/Debug/netcoreapp2.1
+/Square/SquareLib/bin
