@@ -10,32 +10,19 @@ namespace Tests
 		[Test]
 		public void CircleTest1()
 		{
-			var circle = new Circle();
-			Assert.AreEqual(circle.Square(), 0);
-		}
-
+			Assert.Throws<ArgumentException>(() => new Circle() { Radius = -1 });
+		}		
 		[Test]
 		public void CircleTest2()
 		{
-			var circle = new Circle() { Radius = 2 };
-			Assert.AreEqual(circle.Square(), Math.PI * 4);
+			Assert.AreEqual(new Circle().Square(), 0);
 		}
 
 		[Test]
 		public void CircleTest3()
 		{
-			var circle = new Circle() { Radius = -1 };
-
-			try
-			{
-				circle.Square();
-			}
-			catch(ArgumentException)
-			{
-				Assert.Pass();
-			}
-
-			Assert.Fail();
+			var circle = new Circle() { Radius = 2 };
+			Assert.AreEqual(circle.Square(), Math.PI * 4);
 		}
 	}
 }

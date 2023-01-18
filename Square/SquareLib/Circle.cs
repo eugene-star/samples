@@ -4,14 +4,21 @@ namespace SquareLib
 {
 	public class Circle : IShape
 	{
-		public double Radius { get; set; }
+		decimal _radius;
 
-		public double Square()
+		public decimal Radius
 		{
-			if (Radius < 0)
-				throw new ArgumentException("Radius can't be below zero");
+			get => _radius;
 
-			return Math.PI * Math.Pow(Radius, 2);
+			set
+			{
+				if (value < 0)
+					throw new ArgumentException("Radius can't be below zero.");
+
+				_radius = value;
+			}
 		}
+
+		public double Square() => Math.PI * (double)(_radius * _radius);
 	}
 }
