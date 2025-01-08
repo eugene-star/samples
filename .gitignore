@@ -1,3 +1,19 @@
+# Build results
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio 2015 cache/options directory
+.vs/
+
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+
+*.user
+
 # Prerequisites
 *.d
 
@@ -50,3 +66,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+
+
+
