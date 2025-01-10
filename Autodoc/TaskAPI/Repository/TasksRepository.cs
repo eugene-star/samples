@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TaskAPI.Model;
 
 namespace TaskAPI.Repository
 {
-	public class TasksRepository
+	public class TasksRepository : IReporitory<Model.Task>
 	{
 		private readonly TasksDbContext _context;
 
@@ -13,17 +12,19 @@ namespace TaskAPI.Repository
 			_context = context;
 		}
 
-		public async Task<IEnumerable<WorkTask>> GetList(int first, int count)
+		public async Task<IEnumerable<Model.Task>> GetList(int first, int count)
 		{
 			return (await _context.Tasks.ToListAsync()).Skip(first).Take(count);
 		}
 
-		public async Task<WorkTask> Read(int id)
+		public async Task<Model.Task?> Read(int id)
 		{
-			return await _context.Tasks.FindAsync(id);
+			return await _context.Tasks
+				.Include(t => t.Files)
+				.SingleOrDefaultAsync(t => t.Id == id);
 		}
 
-		public async Task<bool> Update(int id, WorkTask task)
+		public async Task<bool> Update(int id, Model.Task task)
 		{
 			_context.Entry(task).State = EntityState.Modified;
 			try
@@ -41,7 +42,7 @@ namespace TaskAPI.Repository
 			return true;
 		}
 
-		public async Task<WorkTask> Create(WorkTask task)
+		public async Task<Model.Task> Create(Model.Task task)
 		{
 			_context.Tasks.Add(task);
 			await _context.SaveChangesAsync();

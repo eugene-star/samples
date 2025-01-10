@@ -19,13 +19,13 @@ namespace TaskAPI.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<WorkTask>>> Get(int first = 0, int count = 10)
+		public async Task<ActionResult<IEnumerable<Model.Task>>> Get(int first = 0, int count = 10)
 		{
 			return new (await _tasksRepo.GetList(first, count));
 		}
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<WorkTask>> GetTask(int id)
+		public async Task<ActionResult<Model.Task>> GetTask(int id)
 		{
 			var task = await _tasksRepo.Read(id);
 			if (task is null)
@@ -34,7 +34,7 @@ namespace TaskAPI.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> PutTask(int id, WorkTask task)
+		public async Task<IActionResult> PutTask(int id, Model.Task task)
 		{
 			if (id != task.Id)
 				return BadRequest();
@@ -46,14 +46,14 @@ namespace TaskAPI.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<WorkTask>> PostTask(WorkTask task)
+		public async Task<ActionResult<Model.Task>> PostTask(Model.Task task)
 		{
 			await _tasksRepo.Create(task);
 			return CreatedAtAction("PostTask", new { id = task.Id }, task);
 		}
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult<WorkTask>> DeleteTask(int id)
+		public async Task<ActionResult<Model.Task>> DeleteTask(int id)
 		{
 			if (await _tasksRepo.Delete(id))
 				return NoContent();

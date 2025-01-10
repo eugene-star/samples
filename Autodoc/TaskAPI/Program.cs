@@ -5,9 +5,13 @@ using TaskAPI.Repository;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
+		//.AddJsonOptions(
+		//	options => options.JsonSerializerOptions.IncludeFields = true
+		//)
 	.Services.AddOpenApi()
 	.AddDbContext<TasksDbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("TasksDbConnectionString")))
-	.AddTransient<TasksRepository>();
+	.AddTransient<TasksRepository>()
+	.AddTransient<FilesRepository>();
 
 var app = builder.Build();
 
