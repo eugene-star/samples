@@ -4,39 +4,38 @@ namespace SquareLib
 {
 	public class Triangle : IShape
 	{
-		public double SideA { get; set; }
-		public double SideB { get; set; }
-		public double SideC { get; set; }
+		decimal _a, _b, _c;
+
+		public decimal A => _a;
+		public decimal B => _b; 
+		public decimal C => _c;
+
+		public Triangle SetSides(decimal a, decimal b, decimal c)
+		{
+			if (a < 0 || b < 0 || c < 0)
+				throw new ArgumentException("All sides must be non-negative.");
+
+			if (a > b + c || b > a + c || c > b + a)
+				throw new ArgumentException("Sides doesn't match to each other.");
+
+			_a = a;
+			_b = b;
+			_c = c;
+
+			return this;
+		}
 
 		public double Square()
 		{
-			double a = SideA, b = SideB, c = SideC;
-				
-			if (IsInvalid(a, b, c))
-				throw new ArgumentException("Invalid triangle");
-
 			// Heron's formula
-			double p = (a + b + c) / 2;
-			return Math.Sqrt(p * (p - a) * (p - b) * (p - c));
+			var p = (_a + _b + _c) / 2;
+			return Math.Sqrt((double)(p * (p - _a) * (p - _b) * (p - _c)));
 		}
 
-		public bool IsRight()
-		{
-			double a = SideA, b = SideB, c = SideC;
-
-			if (IsInvalid(a, b, c))
-				throw new ArgumentException("Invalid triangle");
-
+		public bool IsRight() =>
 			// Pythagorean theorem
-			return (Math.Pow(a, 2) == Math.Pow(b, 2) + Math.Pow(c, 2) ||
-					Math.Pow(b, 2) == Math.Pow(a, 2) + Math.Pow(c, 2) ||
-					Math.Pow(c, 2) == Math.Pow(b, 2) + Math.Pow(a, 2));
-		}
-
-		private static bool IsInvalid(double a, double b, double c)
-		{
-			return a < 0 || b < 0 || c < 0 ||
-				a > b + c || b > a + c || c > b + a;
-		}
+			_a * _a == _b * _b + _c * _c ||
+			_b * _b == _a * _a + _c * _c ||
+			_c * _c == _a * _a + _b * _b;
 	}
 }
