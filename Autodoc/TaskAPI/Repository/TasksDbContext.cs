@@ -7,7 +7,6 @@ namespace TaskAPI.Repository
 		public DbSet<Model.Task> Tasks { get; set; }
 		public DbSet<Model.File> Files { get; set; }
 
-
 		public TasksDbContext(DbContextOptions<TasksDbContext> options) : base(options)
 		{
 		}

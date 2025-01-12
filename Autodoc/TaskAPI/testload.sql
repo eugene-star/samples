@@ -1,7 +1,13 @@
-insert Task (Name, Dt, Status) values ('T1', SYSDATETIME(), 'Active')
-insert Task (Name, Dt, Status) values ('T2', SYSDATETIME(), 'New')
+declare @idTable table (id int);
+insert Task (Name, Dt, Status)
+	output inserted.id into @idTable
+	values ('T1', sysdatetime(), 'Active');
+declare @taskId int;
+select @taskId = id from @idTable;
 
-insert [File] (TaskId, Name) values (6, '1.bin')
-insert [File] (TaskId, Name) values (6, '2.bin')
+insert [File] (TaskId, Name) values (@taskId, '1.bin');
+insert [File] (TaskId, Name) values (@taskId, '2.bin');
 
-select * from Task t join [File] f on f.TaskId=t.Id
+insert Task (Name, Dt, Status) values ('T2', sysdatetime(), 'New');
+
+select * from Task t left join [File] f on f.TaskId=t.Id;

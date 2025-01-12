@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskAPI.Model;
 
 namespace TaskAPI.Repository
 {
@@ -24,7 +23,7 @@ namespace TaskAPI.Repository
 				.SingleOrDefaultAsync(t => t.Id == id);
 		}
 
-		public async Task<bool> Update(int id, Model.Task task)
+		public async Task<bool> Update(Model.Task task)
 		{
 			_context.Entry(task).State = EntityState.Modified;
 			try
@@ -33,7 +32,7 @@ namespace TaskAPI.Repository
 			}
 			catch (DbUpdateConcurrencyException)
 			{
-				if (!_context.Tasks.Any(e => e.Id == id))
+				if (!_context.Tasks.Any(e => e.Id == task.Id))
 					return false;
 				else
 					throw;

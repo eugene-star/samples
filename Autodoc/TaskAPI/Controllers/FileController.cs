@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 using TaskAPI.Model;
 using TaskAPI.Repository;
 
@@ -30,21 +28,24 @@ namespace TaskAPI.Controllers
 		{
 			var file = await _filesRepo.Read(id);
 			if (file is null)
+			{
+				_logger.LogError($"File id={id} not found");
 				return NotFound();
+			}
 			else
 				return PhysicalFile(Directory.GetCurrentDirectory() + "\\Files\\" + file.Name, "application/octet-stream", file.Name);
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> PutFile(int id, Model.File file)
+		public async Task<IActionResult> PutFile(Model.File file)
 		{
-			if (id != file.Id)
-				return BadRequest();
-
-			if(await _filesRepo.Update(id, file))
-				return NoContent();
+			if(await _filesRepo.Update(file))
+				return Ok();
 			else
+			{
+				_logger.LogError($"Can't update file id={file.Id} name={file.Name}");
 				return NotFound();
+			}
 		}
 
 		[HttpPost, DisableRequestSizeLimit]
@@ -54,7 +55,7 @@ namespace TaskAPI.Controllers
 			await _filesRepo.Create(file);
 			await using var fileStream = new FileStream("Files\\" + taskFileUpload.UploadedFile.FileName, FileMode.Create);
 			await taskFileUpload.UploadedFile.CopyToAsync(fileStream);
-			return Ok();
+			return CreatedAtAction("PostFile", file);
 		}
 
 		[HttpDelete("{id}")]
@@ -63,7 +64,10 @@ namespace TaskAPI.Controllers
 			if (await _filesRepo.Delete(id))
 				return Ok();
 			else
+			{
+				_logger.LogError($"File id={id} not found");
 				return NotFound();
+			}
 		}
 	}
 }

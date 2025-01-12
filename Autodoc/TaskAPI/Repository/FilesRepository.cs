@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskAPI.Model;
 
 namespace TaskAPI.Repository
 {
@@ -22,7 +21,7 @@ namespace TaskAPI.Repository
 			return await _context.Files.FindAsync(id);
 		}
 
-		public async Task<bool> Update(int id, Model.File file)
+		public async Task<bool> Update(Model.File file)
 		{
 			_context.Entry(file).State = EntityState.Modified;
 			try
@@ -31,7 +30,7 @@ namespace TaskAPI.Repository
 			}
 			catch (DbUpdateConcurrencyException)
 			{
-				if (!_context.Files.Any(e => e.Id == id))
+				if (!_context.Files.Any(e => e.Id == file.Id))
 					return false;
 				else
 					throw;

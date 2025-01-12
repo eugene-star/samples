@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TaskAPI.Model;
 using TaskAPI.Repository;
 
 namespace TaskAPI.Controllers
@@ -29,36 +27,43 @@ namespace TaskAPI.Controllers
 		{
 			var task = await _tasksRepo.Read(id);
 			if (task is null)
+			{
+				_logger.LogError($"Task id={id} not found");
 				return NotFound();
-			return task;
+			}
+			else
+				return task;
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> PutTask(int id, Model.Task task)
+		public async Task<IActionResult> PutTask(Model.Task task)
 		{
-			if (id != task.Id)
-				return BadRequest();
-
-			if(await _tasksRepo.Update(id, task))
-				return NoContent();
+			if(await _tasksRepo.Update(task))
+				return Ok();
 			else
+			{
+				_logger.LogError($"Task id={task.Id} not found");
 				return NotFound();
+			}
 		}
 
 		[HttpPost]
 		public async Task<ActionResult<Model.Task>> PostTask(Model.Task task)
 		{
 			await _tasksRepo.Create(task);
-			return CreatedAtAction("PostTask", new { id = task.Id }, task);
+			return CreatedAtAction("PostTask", task);
 		}
 
 		[HttpDelete("{id}")]
 		public async Task<ActionResult<Model.Task>> DeleteTask(int id)
 		{
 			if (await _tasksRepo.Delete(id))
-				return NoContent();
+				return Ok();
 			else
+			{
+				_logger.LogError($"Task id={id} not found");
 				return NotFound();
+			}
 		}
 	}
 }

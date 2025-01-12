@@ -8,7 +8,7 @@ namespace TaskAPI.Repository
 
 		public Task<T?> Read(int id);
 
-		public Task<bool> Update(int id, T entity);
+		public Task<bool> Update(T entity);
 
 		public Task<T> Create(T entity);
 
